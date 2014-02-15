@@ -5,6 +5,7 @@
   border: 1px solid black;
   height: 500px;
   width: 500px;
+  overflow: hidden;
   position: relative;
   background-image: url("../art/bg_mit.png"); }
   .world .grass {

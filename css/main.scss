@@ -9,6 +9,7 @@ $gameSize: 500px;
   border: 1px solid black; // Don't hate me
   height: $gameSize;
   width: $gameSize;
+  overflow: hidden;
   position: relative;
   background-image: url('../art/bg_mit.png');
   .grass {

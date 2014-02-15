@@ -2,12 +2,12 @@
 var FLAPPYBEAVER = {
   FLY_VELOCITY: -2, // Speed it flies up when user taps
   FPS: 24,
-  PIPE_INTERVAL: 150, // Interval between pipe appearing
+  PIPE_INTERVAL: 200, // Interval between pipe appearing
   GAME_SIZE: 500,
   GRAVITY: 0.05,
   INITIAL_VELOCITY: -1,
   MAX_HEIGHT: 0,
-  GROUND_SPEED: 10,
+  GROUND_SPEED: 20,
 };
 
 window.top.FLAPPYBEAVER = FLAPPYBEAVER;
@@ -26,6 +26,7 @@ var FlappyBeaver = function(spriteClass, worldClass, pipeClass) {
   this.framesTillNewPipe = FLAPPYBEAVER.PIPE_INTERVAL;
   this.artInterval = 0;
   this.pipes = [];
+  this.collided = false;
 };
 
 // Initializes whatever needs to be initialized
@@ -47,9 +48,12 @@ FlappyBeaver.prototype.start = function() {
 // Smallest step the game takes
 FlappyBeaver.prototype.nextStep = function() {
   this.fall();
-  this.moveWorld();
+  if (!this.collision) {
+    this.moveWorld();
+  }
 
   // Check if the bird hit the ground yet and stop looping
+  this.checkCollision();
   this.checkDead();
 }
 
@@ -62,10 +66,10 @@ FlappyBeaver.prototype.moveWorld = function() {
 
   // Remove the pipes already off screen
   this.pipes = _.filter(this.pipes, function(pipe) {
-    if (pipe.worldPosition + PIPE.WIDTH < 0) {
+    if (pipe.worldPosition + pipe.pipeDiv.width() < 0) {
       pipe.remove();
     }
-    return pipe.worldPosition + PIPE.WIDTH >= 0;
+    return pipe.worldPosition + pipe.pipeDiv.width() >= 0;
   });
 
   // Time for a new pipe
@@ -78,7 +82,6 @@ FlappyBeaver.prototype.moveWorld = function() {
   // Art and beauty
   this.artInterval += 1;
   if (this.artInterval % FLAPPYBEAVER.GROUND_SPEED === 0){
-    console.log('hey');
     bgPos = '0px ' + this.artInterval / FLAPPYBEAVER.GROUND_SPEED * 61 + 'px';
     $('.grass').css({backgroundPosition: bgPos})
   }
@@ -108,6 +111,17 @@ FlappyBeaver.prototype.fly = function() {
   this.velocity = FLAPPYBEAVER.FLY_VELOCITY;
 }
 
+FlappyBeaver.prototype.checkCollision = function() {
+  var game = this;
+  _.each(this.pipes, function(pipe, index, list) {
+    if (pipe.collision(game.sprite.position(), game.sprite.height(), game.sprite.width())) {
+      console.log("COLLISION AH");
+      this.collision = true;
+      game.velocity = 50;
+    }
+  });
+}
+
 // Returns true if the beaver hit the ground
 // Stops the loop if it has
 FlappyBeaver.prototype.checkDead = function() {
@@ -125,4 +139,5 @@ FlappyBeaver.prototype.reset = function() {
   this.artInterval = 0;
   this.pipes = [];
   this.level = 1;
+  this.collision = false;
 }
