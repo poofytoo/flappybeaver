@@ -5,6 +5,8 @@
   <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
   <link rel="stylesheet" type="text/css" href="css/main.css" media="screen" />
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="js/pipe.js"></script>
   <script src="js/flappybeaver.js"></script>
   <script src="js/scripts.js"></script>
 
@@ -18,11 +20,37 @@
       position: absolute;
       top: 50%;
     }
+    #one {
+      margin-left: 100px;
+    }
+    #one .top {
+      height: 200px;
+    }
+    #one .bottom {
+      height: 200px;
+    }
   </style>
 </head>
 <body>
   <div class='world'>
+    <div class='pipes' >
+      <div class='pipe' id='one'>
+        <div class='top'></div>
+        <div class='bottom'></div>
+      </div>
+      <div class='pipe' id='two'>
+      <div class='top'></div>
+      <div class='bottom'></div>
+    </div>
+    <div class='pipe' id='three'>
+      <div class='top'></div>
+      <div class='bottom'></div>
+    </div>
+    </div>
+    
     <div class='flappy'>
+    </div>
+    <div class='grass'>
     </div>
   </div>
 </body>
