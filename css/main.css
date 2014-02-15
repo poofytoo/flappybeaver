@@ -1,3 +1,6 @@
+.flappy {
+  z-index: 100; }
+
 .world {
   border: 1px solid black;
   height: 500px;
@@ -14,9 +17,11 @@
 .pipes {
   height: 100%; }
   .pipes .pipe {
+    display: inline-block;
     width: 100px;
     height: 100%;
-    position: relative; }
+    position: absolute;
+    z-index: 50; }
     .pipes .pipe .top {
       position: absolute;
       background-color: green;

@@ -1,5 +1,10 @@
 $gameSize: 500px;
 
+
+.flappy {
+  z-index: 100;
+}
+
 .world {
   border: 1px solid black; // Don't hate me
   height: $gameSize;
@@ -18,23 +23,22 @@ $gameSize: 500px;
 .pipes {
   height: 100%;
   .pipe {
-  width: 100px;
-  height: 100%;
-  position: relative;
-  //margin-left: 100px;
+    display: inline-block;
+    width: 100px;
+    height: 100%;
+    position: absolute;
+    z-index: 50;
   .top {
     position: absolute;
     background-color: green;
     top: 0;
     width: 100%;
-    //height: 200px;
   }
   .bottom {
     position: absolute;
     background-color: green;
     bottom: 0;
     width: 100%;
-    //height: 150px;
   }
 }
 }

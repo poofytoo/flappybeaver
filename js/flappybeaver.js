@@ -1,24 +1,29 @@
 // Constants
 var FLAPPYBEAVER = {
-  flyVelocity: -2, // Speed it flies up when user taps
-  fps: 24,
-  pipeInterval: 10,
-  gameSize: 500,
-  gravity: 0.05,
-  initialVelocity: -1,
-  maxHeight: 0,
-  groundSpeed: 10,
+  FLY_VELOCITY: -2, // Speed it flies up when user taps
+  FPS: 24,
+  PIPE_INTERVAL: 150, // Interval between pipe appearing
+  GAME_SIZE: 500,
+  GRAVITY: 0.05,
+  INITIAL_VELOCITY: -1,
+  MAX_HEIGHT: 0,
+  GROUND_SPEED: 10,
 };
 
 window.top.FLAPPYBEAVER = FLAPPYBEAVER;
 
-var FlappyBeaver = function(spriteClass, worldClass) {
+var FlappyBeaver = function(spriteClass, worldClass, pipeClass) {
   this.level = 1;
+
+  // DOM elements
   this.sprite = $('.' + spriteClass); // Class name of the div for the birdy
   this.world = $('.' + worldClass); // Class name of the div for the whole game
-  this.velocity = FLAPPYBEAVER.initialVelocity;
+  this.pipesContainer = $('.' + pipeClass);
+
+  // Game variables
+  this.velocity = FLAPPYBEAVER.INITIAL_VELOCITY;
   this.gameloop;
-  this.framesTillNewPipe = FLAPPYBEAVER.pipeInterval;
+  this.framesTillNewPipe = FLAPPYBEAVER.PIPE_INTERVAL;
   this.artInterval = 0;
   this.pipes = [];
 };
@@ -36,66 +41,88 @@ FlappyBeaver.prototype.start = function() {
   var game = this;
   this.gameloop = setInterval(function() {
     game.nextStep();
-  }, 1.0/FLAPPYBEAVER.fps);
+  }, 1.0/FLAPPYBEAVER.FPS);
 }
 
 // Smallest step the game takes
 FlappyBeaver.prototype.nextStep = function() {
   this.fall();
-  //this.moveWorld();
+  this.moveWorld();
 
   // Check if the bird hit the ground yet and stop looping
   this.checkDead();
-
-  // Art and beauty
-  this.artInterval += 1;
-  if (this.artInterval % FLAPPYBEAVER.groundSpeed === 0){
-    console.log('hey');
-    bgPos = '0px ' + this.artInterval / FLAPPYBEAVER.groundSpeed * 61 + 'px';
-    $('.grass').css({backgroundPosition: bgPos})
-  }
 }
 
 
 FlappyBeaver.prototype.moveWorld = function() {
+  // Move each pipe left
   _.each(this.pipes, function(pipe, index, list) {
     pipe.moveLeft();
   });
+
+  // Remove the pipes already off screen
+  this.pipes = _.filter(this.pipes, function(pipe) {
+    if (pipe.worldPosition + PIPE.WIDTH < 0) {
+      pipe.remove();
+    }
+    return pipe.worldPosition + PIPE.WIDTH >= 0;
+  });
+
+  // Time for a new pipe
   if (this.framesTillNewPipe === 0) {
     this.newPipe();
-    this.framesTillNewPipe = FLAPPYBEAVER.pipeInterval;
+    this.framesTillNewPipe = FLAPPYBEAVER.PIPE_INTERVAL;
   }
   this.framesTillNewPipe--;
+
+  // Art and beauty
+  this.artInterval += 1;
+  if (this.artInterval % FLAPPYBEAVER.GROUND_SPEED === 0){
+    console.log('hey');
+    bgPos = '0px ' + this.artInterval / FLAPPYBEAVER.GROUND_SPEED * 61 + 'px';
+    $('.grass').css({backgroundPosition: bgPos})
+  }
 }
 
+// Creates a new pipe and adds it to both the array of pipes and the visually
 FlappyBeaver.prototype.newPipe = function() {
   var pipe = $("<div class='pipe'></div>");
-  this.world.prepend(pipe);
+  this.pipesContainer.append(pipe);
   this.pipes.push(new Pipe(pipe));
 }
 
 // Fall bird fall
 FlappyBeaver.prototype.fall = function() {
   var newPosition = Math.min(this.sprite.position().top + this.velocity,
-                             FLAPPYBEAVER.gameSize - this.sprite.height());
-  newPosition = Math.max(FLAPPYBEAVER.maxHeight, newPosition);
+                             FLAPPYBEAVER.GAME_SIZE - this.sprite.height());
+  newPosition = Math.max(FLAPPYBEAVER.MAX_HEIGHT, newPosition);
   this.sprite.css({
     top: newPosition
   });
-  this.velocity += FLAPPYBEAVER.gravity;
+  this.velocity += FLAPPYBEAVER.GRAVITY;
 }
 
 // Called when the user clicks
 // Basically just reverses the velocity so the bird flies for a bit
 FlappyBeaver.prototype.fly = function() {
-  this.velocity = FLAPPYBEAVER.flyVelocity;
+  this.velocity = FLAPPYBEAVER.FLY_VELOCITY;
 }
 
 // Returns true if the beaver hit the ground
 // Stops the loop if it has
 FlappyBeaver.prototype.checkDead = function() {
-  if (this.sprite.position().top  + this.sprite.height() >= FLAPPYBEAVER.gameSize) {
+  if (this.sprite.position().top  + this.sprite.height() >= FLAPPYBEAVER.GAME_SIZE) {
     clearInterval(this.gameloop);
-    this.gameloop = NaN;
+    this.reset();
   }
+}
+
+// Resets all variables
+FlappyBeaver.prototype.reset = function() {
+  this.velocity = FLAPPYBEAVER.INITIAL_VELOCITY;
+  this.gameloop = NaN;
+  this.framesTillNewPipe = FLAPPYBEAVER.PIPE_INTERVAL;
+  this.artInterval = 0;
+  this.pipes = [];
+  this.level = 1;
 }
