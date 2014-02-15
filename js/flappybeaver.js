@@ -4,7 +4,6 @@ var FLAPPYBEAVER = {
   flyVelocity: -2,
   initialVelocity: -1,
   gameSize: 500,
-  topOffset: 1,
   fps: 24
 };
 
@@ -25,10 +24,8 @@ FlappyBeaver.prototype.nextStep = function() {
   });
   this.velocity += FLAPPYBEAVER.gravity;
 
-  if (this.isDead()) {
-    clearInterval(this.gameloop);
-    this.gameloop = NaN;
-  }
+  // Check if the bird hit the ground yet and stop looping
+  this.checkDead();
 }
 
 // Starts the game
@@ -39,11 +36,17 @@ FlappyBeaver.prototype.start = function() {
   }, 1.0/FLAPPYBEAVER.fps);
 }
 
+// Called when the user clicks
+// Basically just reverses the velocity so the bird flies for a bit
 FlappyBeaver.prototype.fly = function() {
   this.velocity = FLAPPYBEAVER.flyVelocity;
 }
 
 // Returns true if the beaver hit the ground
-FlappyBeaver.prototype.isDead = function() {
-  return this.sprite.position().top  + this.sprite.height() >= FLAPPYBEAVER.gameSize;
+// Stops the loop if it has
+FlappyBeaver.prototype.checkDead = function() {
+  if (this.sprite.position().top  + this.sprite.height() >= FLAPPYBEAVER.gameSize) {
+    clearInterval(this.gameloop);
+    this.gameloop = NaN;
+  }
 }

@@ -3,7 +3,6 @@ $(document).ready(function() {
   game.start();
 
   $('.world').click(function() {
-    console.log("AHHH");
     game.fly();
   });
 });
