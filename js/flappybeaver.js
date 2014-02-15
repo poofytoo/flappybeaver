@@ -48,13 +48,13 @@ FlappyBeaver.prototype.start = function() {
 // Smallest step the game takes
 FlappyBeaver.prototype.nextStep = function() {
   this.fall();
-  if (!this.collision) {
+
+  if (!this.collision) { // If the flappy has collided with something, stop moving the world
     this.moveWorld();
   }
 
-  // Check if the bird hit the ground yet and stop looping
-  this.checkCollision();
-  this.checkDead();
+  this.checkCollision(); // Check if the flappy has collided with anything
+  this.checkDead(); // Check if the flappy hit the ground yet and stop looping
 }
 
 
@@ -111,11 +111,13 @@ FlappyBeaver.prototype.fly = function() {
   this.velocity = FLAPPYBEAVER.FLY_VELOCITY;
 }
 
+// Checks if the flappy thing has collided with any pipes on the screen
+// If it has, sets the velocity to something high to make it drop, and
+// toggle the collision variable
 FlappyBeaver.prototype.checkCollision = function() {
   var game = this;
   _.each(this.pipes, function(pipe, index, list) {
     if (pipe.collision(game.sprite.position(), game.sprite.height(), game.sprite.width())) {
-      console.log("COLLISION AH");
       this.collision = true;
       game.velocity = 50;
     }
