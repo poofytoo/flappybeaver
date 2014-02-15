@@ -1,6 +1,7 @@
 // Constants
 var FLAPPYBEAVER = {
   gravity: 0.05,
+  flyVelocity: -2,
   initialVelocity: -1,
   gameSize: 500,
   topOffset: 1,
@@ -14,6 +15,8 @@ var FlappyBeaver = function(spriteClass) {
   this.gameloop;
 };
 
+// Smallest step the bird takes
+// e.g. it falls
 FlappyBeaver.prototype.nextStep = function() {
   var newPosition = Math.min(this.sprite.position().top + this.velocity,
                              FLAPPYBEAVER.gameSize - this.sprite.height());
@@ -28,7 +31,7 @@ FlappyBeaver.prototype.nextStep = function() {
   }
 }
 
-
+// Starts the game
 FlappyBeaver.prototype.start = function() {
   var game = this;
   this.gameloop = setInterval(function() {
@@ -36,6 +39,11 @@ FlappyBeaver.prototype.start = function() {
   }, 1.0/FLAPPYBEAVER.fps);
 }
 
+FlappyBeaver.prototype.fly = function() {
+  this.velocity = FLAPPYBEAVER.flyVelocity;
+}
+
+// Returns true if the beaver hit the ground
 FlappyBeaver.prototype.isDead = function() {
   return this.sprite.position().top  + this.sprite.height() >= FLAPPYBEAVER.gameSize;
 }
