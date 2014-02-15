@@ -5,9 +5,26 @@
   <link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
   <link rel="stylesheet" type="text/css" href="css/main.css" media="screen" />
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="js/polyfill.js"></script>
+  <script src="js/flappybeaver.js"></script>
   <script src="js/scripts.js"></script>
+
+  <!-- For testing -->
+  <style>
+    .flappy {
+      height: 30px;
+      width: 30px;
+      display block;
+      background-color: red;
+      position: absolute;
+      top: 50%;
+    }
+  </style>
 </head>
 <body>
-
+  <div class='world'>
+    <div class='flappy'>
+    </div>
+  </div>
 </body>
 </html>
