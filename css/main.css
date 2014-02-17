@@ -21,7 +21,8 @@
     background-image: url("../art/bg_grass.png"); }
   .world .score {
     position: absolute;
-    top: 0; }
+    top: 0;
+    z-index: 70; }
 
 .pipes {
   height: 100%; }

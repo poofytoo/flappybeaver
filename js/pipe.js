@@ -44,5 +44,5 @@ Pipe.prototype.collision = function(spritePosition, height, width) {
 
 // Returns true if the sprite has completely passed this pipe
 Pipe.prototype.passed = function(spritePosition, height, width) {
-  return !this.collision(spritePosition, height, width) && spritePosition.left >= this.worldPosition + this.pipeDiv.width();
+  return !this.collision(spritePosition, height, width) && spritePosition.left >= this.worldPosition;
 }
