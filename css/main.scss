@@ -19,6 +19,10 @@ $gameSize: 500px;
     bottom: 0px;
     background-image: url('../art/bg_grass.png');
   }
+  .score {
+    position: absolute;
+    top: 0;
+  }
 }
 
 .pipes {

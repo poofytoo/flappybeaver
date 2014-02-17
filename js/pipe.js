@@ -1,15 +1,16 @@
 // Constants
 var PIPE = {
-  GAP: 100,
-  VELOCITY: -2
+  GAP: 200,
+  VELOCITY: -1
 };
 
 window.top.PIPE = PIPE;
 
 // Pipe class representing the pipes that the flappy has to fly through
-var Pipe = function(pipe) {
+var Pipe = function(pipe, idx) {
   this.worldPosition = FLAPPYBEAVER.GAME_SIZE;
   this.pipeDiv = pipe;
+  this.idx = idx;
 
   // Create pipes randomly
   this.top = $("<div class='top'></div>");
@@ -39,4 +40,9 @@ Pipe.prototype.collision = function(spritePosition, height, width) {
     return spritePosition.top <= this.top.height() || spritePosition.top + height >= this.top.height() + PIPE.GAP;
   }
   return false;
+}
+
+// Returns true if the sprite has completely passed this pipe
+Pipe.prototype.passed = function(spritePosition, height, width) {
+  return !this.collision(spritePosition, height, width) && spritePosition.left >= this.worldPosition + this.pipeDiv.width();
 }
