@@ -1,17 +1,23 @@
 // Constants
 var FLAPPYBEAVER = {
+  INITIAL_VELOCITY: -1,
+  INITIAL_ROTATION: 0,
+
   FLY_VELOCITY: -1.25, // Speed it flies up when user taps
   FLY_ROTATION: -45,
+  GROUND_SPEED: 20,
+  GRAVITY: 0.025,
+
+  ROTATION_SCALE: 40,
+  ART_SCALE: 61,
+
+  MAX_HEIGHT: 0,
+  MAX_ROTATION: 90,
+  MAX_SPEED: 50,
+
   FPS: 24,
   PIPE_INTERVAL: 400, // Interval between pipe appearing
   GAME_SIZE: 500,
-  GRAVITY: 0.025,
-  INITIAL_VELOCITY: -1,
-  INITIAL_ROTATION: 0,
-  ROTATION_SCALE: 40,
-  ART_SCALE: 61,
-  MAX_HEIGHT: 0,
-  GROUND_SPEED: 20,
 };
 
 // Initial numeric/boolean game values
@@ -147,7 +153,8 @@ FlappyBeaver.prototype.checkCollision = function() {
   _.each(this.pipes, function(pipe, index, list) {
     if (pipe.collision(game.sprite.position(), game.sprite.height(), game.sprite.width())) {
       game.variables.collision = true;
-      game.variables.velocity = 50;
+      game.variables.velocity = FLAPPYBEAVER.MAX_SPEED;
+      game.variables.rotation = FLAPPYBEAVER.MAX_ROTATION;
     } else if (pipe.passed(game.sprite.position(), game.sprite.height(), game.sprite.width()) && pipe.idx > game.variables.score) {
       game.incrementScore();
     }
