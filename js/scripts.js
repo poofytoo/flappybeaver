@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var game = new FlappyBeaver('flappy', 'world', 'pipes', 'score');
+  var game = new FlappyBeaver('flappyContainer', 'world', 'pipes', 'score');
   game.init();
   game.start();
 });

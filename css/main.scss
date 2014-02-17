@@ -1,7 +1,12 @@
 $gameSize: 500px;
 
 
-.flappy {
+.flappyContainer {
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: 50%;
   z-index: 100;
 }
 

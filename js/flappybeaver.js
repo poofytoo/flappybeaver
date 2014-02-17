@@ -1,11 +1,15 @@
 // Constants
 var FLAPPYBEAVER = {
   FLY_VELOCITY: -1.25, // Speed it flies up when user taps
+  FLY_ROTATION: -45,
   FPS: 24,
   PIPE_INTERVAL: 400, // Interval between pipe appearing
   GAME_SIZE: 500,
   GRAVITY: 0.025,
   INITIAL_VELOCITY: -1,
+  INITIAL_ROTATION: 0,
+  ROTATION_SCALE: 40,
+  ART_SCALE: 61,
   MAX_HEIGHT: 0,
   GROUND_SPEED: 20,
 };
@@ -13,6 +17,7 @@ var FLAPPYBEAVER = {
 // Initial numeric/boolean game values
 FLAPPYBEAVER.INITIAL_VALUES = {
     velocity: FLAPPYBEAVER.INITIAL_VELOCITY,
+    rotation: 0,
     gameloop: NaN,
     framesTillNewPipe: FLAPPYBEAVER.PIPE_INTERVAL,
     artInterval: 0,
@@ -90,7 +95,7 @@ FlappyBeaver.prototype.moveWorld = function() {
   // Art and beauty
   this.variables.artInterval += 1;
   if (this.variables.artInterval % FLAPPYBEAVER.GROUND_SPEED === 0){
-    bgPos = '0px ' + this.variables.artInterval / FLAPPYBEAVER.GROUND_SPEED * 61 + 'px';
+    bgPos = '0px ' + this.variables.artInterval / FLAPPYBEAVER.GROUND_SPEED * FLAPPYBEAVER.ART_SCALE + 'px';
     $('.grass').css({backgroundPosition: bgPos})
   }
 }
@@ -107,16 +112,26 @@ FlappyBeaver.prototype.fall = function() {
   var newPosition = Math.min(this.sprite.position().top + this.variables.velocity,
                              FLAPPYBEAVER.GAME_SIZE - this.sprite.height());
   newPosition = Math.max(FLAPPYBEAVER.MAX_HEIGHT, newPosition);
+  var rotation = Math.min(this.variables.rotation + FLAPPYBEAVER.GRAVITY * FLAPPYBEAVER.ROTATION_SCALE, 90);
+  rotation = 'rotate(' + rotation + 'deg)';
   this.sprite.css({
     top: newPosition
   });
+  this.sprite.children('.flappy').css({
+    transform: rotation,
+    '-o-transform': rotation,
+    '-moz-transform': rotation,
+    '-webkit-transform': rotation
+  });
   this.variables.velocity += FLAPPYBEAVER.GRAVITY;
+  this.variables.rotation += FLAPPYBEAVER.GRAVITY * FLAPPYBEAVER.ROTATION_SCALE;
 }
 
 // Called when the user clicks
 // Basically just reverses the velocity so the bird flies for a bit
 FlappyBeaver.prototype.fly = function() {
   this.variables.velocity = FLAPPYBEAVER.FLY_VELOCITY;
+  this.variables.rotation = FLAPPYBEAVER.FLY_ROTATION;
 }
 
 // Increments score and updates the text
